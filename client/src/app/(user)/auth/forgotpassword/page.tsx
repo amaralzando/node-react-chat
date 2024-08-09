@@ -28,6 +28,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
+  name: z.string().min(5, {
+    message: "O Nome deve ter pelo menos 5 caracteres.",
+  }),
   email: z
     .string()
     .email({
@@ -44,7 +47,7 @@ const formSchema = z.object({
 });
 
 export default function Login() {
-  const { signIn } = useContext(AuthContext);
+  const { signUp } = useContext(AuthContext);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setISError] = useState("");
@@ -52,6 +55,7 @@ export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
@@ -59,7 +63,7 @@ export default function Login() {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    await signIn(data)
+    await signUp(data)
       .then(() => {
         setIsLoading(false);
       })
@@ -140,20 +144,17 @@ export default function Login() {
             </Form>
           </CardContent>
           <CardFooter className="flex flex-col">
-            <p className="mt-2 text-xs text-center text-gray-700">
+            {/* <p className="mt-2 text-xs text-center text-gray-700">
               {" "}
               Esqueceu sua senha?{" "}
-              <Link
-                href="/auth/forgotpassword"
-                className="text-blue-600 hover:underline"
-              >
+              <Link href="/register" className="text-blue-600 hover:underline">
                 Redefinir senha
               </Link>
-            </p>
+            </p> */}
             <p className="mt-2 text-xs text-center text-gray-700">
               {" "}
               Não possui uma conta?{" "}
-              <Link href="/auth" className="text-blue-600 hover:underline">
+              <Link href="/register" className="text-blue-600 hover:underline">
                 Sign up
               </Link>
             </p>

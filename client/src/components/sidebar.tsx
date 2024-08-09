@@ -31,7 +31,7 @@ export const SideBar = () => {
             { hidden: toggleCollapse }
           )}
         >
-          GASA Dashboard
+          GASA Chat
         </h3>
       </div>
       <nav className="flex flex-col gap-2 transition duration-300 ease-in-out">

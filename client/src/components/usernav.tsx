@@ -2,6 +2,7 @@
 import { AuthContext } from "@/src/contexts/AuthContext";
 import { getInitials } from "@/src/helpers/utis";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 import { useContext } from "react";
 import { Avatar } from "./ui/avatar";
 import { Button } from "./ui/button";
@@ -45,7 +46,9 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href="/settings">Settings</Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
