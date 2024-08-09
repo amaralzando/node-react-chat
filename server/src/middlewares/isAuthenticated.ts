@@ -23,13 +23,15 @@ export async function isAuthenticated(
     //Valida se o sub é compativel com algum do banco de dados
     const user = await prismaClient.user.findFirst({
       where: {
-        id: sub,
+        user_id: sub,
       },
     });
 
+    if (!user) throw new Error("");
+
     req.user_id = sub;
 
-    if (user) return next();
+    return next();
   } catch (error) {
     return res.status(401).end();
   }
