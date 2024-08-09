@@ -1,20 +1,23 @@
-# Dockerfile para o backend Node.js
+# Use a imagem base Node.js
 FROM node:18
 
 # Defina o diretório de trabalho
 WORKDIR /app
 
-# Copie os arquivos package.json e package-lock.json
-COPY server/package*.json ./
+# Copie o arquivo package.json e package-lock.json
+COPY package*.json ./
 
-# Instale as dependências
+# Instale as dependências do projeto
 RUN npm install
 
-# Copie o restante do código
-COPY server/ .
+# Copie o restante do código para o contêiner
+COPY . .
 
-# Exponha a porta usada pelo servidor Node.js
+# Gere o Prisma Client
+RUN npx prisma generate
+
+# Execute as migrações ao iniciar o contêiner
+CMD ["npx", "prisma", "migrate", "deploy", "--skip-seed", "&&", "npm", "run", "start"]
+
+# Exponha a porta que o backend vai usar
 EXPOSE 3333
-
-# Inicie o servidor Node.js
-CMD ["npm", "start"]

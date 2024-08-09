@@ -49,7 +49,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const { "gasachat.token": token } = parseCookies();
     if (token) {
       const decodedToken = jwtDecode(token);
-      console.log(decodedToken.sub);
       api.get("/me").then((resp) => {
         setUser(resp.data);
       });
