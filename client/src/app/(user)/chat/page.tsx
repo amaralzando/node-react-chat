@@ -1,10 +1,3 @@
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Chat",
-  description: "Chat teste com socket.io",
-};
-
-export default function DashboardPage() {
-  return <></>;
+export default function ChatPage() {
+  return <div className="space-y-6">Chat</div>;
 }

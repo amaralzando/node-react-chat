@@ -4,7 +4,7 @@ import { BsGear, BsHouseDoor, BsQuestionCircle } from "react-icons/bs";
 export const SIDENAV_ITEMS: SideNavItemGroup[] = [
   {
     show: true,
-    title: "Views",
+    title: "View",
     menuList: [
       {
         show: true,

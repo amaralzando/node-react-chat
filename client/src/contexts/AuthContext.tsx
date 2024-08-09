@@ -1,7 +1,6 @@
 "use client";
 
 import { AxiosError } from "axios";
-import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { createContext, ReactNode, useEffect, useState } from "react";
@@ -20,11 +19,18 @@ type SignInData = {
   password: string;
 };
 
+type SignUpData = {
+  name: string;
+  email: string;
+  password: string;
+};
+
 type AuthContextType = {
   isAuthenticated: boolean;
   token?: string;
   user?: User;
   signIn: (data: SignInData) => Promise<void>;
+  signUp: (data: SignUpData) => Promise<void>;
   logOut: () => void;
 };
 
@@ -48,7 +54,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const { "gasachat.token": token } = parseCookies();
     if (token) {
-      const decodedToken = jwtDecode(token);
       api.get("/me").then((resp) => {
         setUser(resp.data);
       });
@@ -79,6 +84,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
       });
   }
 
+  async function signUp({ name, email, password }: SignUpData) {
+    await api
+      .post("/register", { name, email, password })
+      .then((resp) => {
+        const user = resp.data;
+
+        setCookie(undefined, "gasachat.token", user.token, {
+          maxAge: 60 * 60 * 24, // 1 day
+        });
+
+        api.defaults.headers["Authorization"] = `Bearer ${user.token}`;
+
+        setUser(user);
+        setToken(user.token);
+
+        router.push("/dashboard");
+      })
+      .catch((error) => {
+        if (error instanceof AxiosError) {
+          throw new Error(error.response?.data?.error);
+        }
+      });
+  }
+
   async function logOut() {
     destroyCookie(undefined, "gasachat.token");
 
@@ -88,7 +117,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ token, user, isAuthenticated, signIn, logOut }}
+      value={{ token, user, isAuthenticated, signIn, signUp, logOut }}
     >
       {children}
     </AuthContext.Provider>

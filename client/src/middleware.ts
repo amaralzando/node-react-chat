@@ -24,8 +24,13 @@ export async function middleware(request: NextRequest) {
   );
 
   if (isProtectedRoute) {
-    if (!tokenCookie) {
-      // Redirect if token is not valid
+    try {
+      if (!tokenCookie) {
+        // Redirect if token is not valid
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+    } catch (error) {
+      // Handle token validation errors (e.g., token not found)
       return NextResponse.redirect(new URL("/", request.url));
     }
   }
