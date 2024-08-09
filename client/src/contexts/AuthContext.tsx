@@ -75,7 +75,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser(user);
         setToken(user.token);
 
-        router.push("/dashboard");
+        router.push("/chat");
       })
       .catch((error) => {
         if (error instanceof AxiosError) {
@@ -99,7 +99,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser(user);
         setToken(user.token);
 
-        router.push("/dashboard");
+        router.push("/chat");
       })
       .catch((error) => {
         if (error instanceof AxiosError) {
