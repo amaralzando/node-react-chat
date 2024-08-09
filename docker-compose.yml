@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./client # Diretório do frontend (Next.js)
+      dockerfile: Dockerfile # Nome do Dockerfile do frontend
+    image: gasachat_client
+    container_name: gasachat_client
+    ports:
+      - "3000:3000" # Mapeia a porta 3000 do container para a porta 3000 do host
+    depends_on:
+      - backend # Garante que o frontend seja iniciado após o backend
+    environment:
+      - REACT_APP_API_URL=http://backend:3333 # URL da API do backend no container
+
+  backend:
+    build:
+      context: ./server # Diretório do backend (Node.js)
+      dockerfile: Dockerfile # Nome do Dockerfile do backend
+    image: gasachat_server
+    container_name: gasachat_server
+    ports:
+      - "3333:3333" # Mapeia a porta 3333 do container para a porta 3333 do host
+    depends_on:
+      - db # Garante que o backend seja iniciado após o banco de dados
+
+  db:
+    image: postgres:latest # Usando a imagem oficial do PostgreSQL
+    container_name: gasachat_db
+    ports:
+      - "5432:5432" # Mapeia a porta 5432 do container para a porta 5432 do host
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: chatdb
