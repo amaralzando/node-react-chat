@@ -1,0 +1,10 @@
+# Dockerfile para o PostgreSQL
+FROM postgres:latest
+
+# Adicione scripts de inicialização personalizados, se houver
+# COPY init.sql /docker-entrypoint-initdb.d/
+
+# Configure variáveis de ambiente, se necessário
+# ENV POSTGRES_USER=user
+# ENV POSTGRES_PASSWORD=password
+# ENV POSTGRES_DB=mydatabase
