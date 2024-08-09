@@ -35,7 +35,7 @@ export class CreatedUserService {
         password: passwordHash,
       },
       select: {
-        id: true,
+        user_id: true,
         name: true,
         email: true,
       },
@@ -48,13 +48,13 @@ export class CreatedUserService {
       },
       process.env.JWT_SECRET as string,
       {
-        subject: user.id,
+        subject: user.user_id,
         expiresIn: "30d",
       }
     );
 
     return {
-      id: user.id,
+      user_id: user.user_id,
       name: user.name,
       email: user.email,
       token: token,

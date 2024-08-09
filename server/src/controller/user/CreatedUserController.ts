@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { CreatedUserService } from "../../services/user/CreatedUserService";
 
 export class CreatedUserController {
-  static async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response) {
     const { name, email, password } = req.body;
 
     const createdUserService = new CreatedUserService();
