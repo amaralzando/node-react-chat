@@ -3,11 +3,17 @@
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { api } from "../services/api";
 
 type User = {
-  user_id: string;
+  user_Id: string;
   name: string;
   email: string;
   role?: string;
@@ -42,7 +48,7 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({
-    user_id: "",
+    user_Id: "",
     name: "",
     email: "",
     token: "",
@@ -56,7 +62,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (token) {
       const { "gasachat.user_Id": user_Id } = parseCookies();
       api.post("/user/me", { user_Id }).then((resp) => {
-        setUser(resp.data);
+        setUser({
+          user_Id: resp.data._id,
+          name: resp.data.name,
+          email: resp.data.email,
+        });
       });
     }
   }, []);
@@ -132,3 +142,5 @@ export function AuthProvider({ children }: AuthProviderProps) {
     </AuthContext.Provider>
   );
 }
+
+export const useUserContext = () => useContext(AuthContext);

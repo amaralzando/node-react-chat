@@ -30,6 +30,8 @@ export const createChat = async (req, res) => {
 
 export const findUserChats = async (req, res) => {
   const { user_Id } = req.body
+
+  console.log(user_Id)
   try {
     const chats = await chatModel.find({
       members: { $in: [user_Id] }
