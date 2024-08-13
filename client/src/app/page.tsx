@@ -1,6 +1,5 @@
 "use client";
 
-import Progressbar from "@/src/components/progressbar";
 import { Button } from "@/src/components/ui/button";
 import {
   Card,
@@ -26,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Progressbar from "../components/progressbar";
 
 const formSchema = z.object({
   email: z
@@ -58,14 +58,18 @@ export default function Login() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    await signIn(data)
-      .then(() => {
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setISError(error);
-      });
+    try {
+      setIsLoading(true);
+      await signIn(data);
+      setIsLoading(false);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.error(error.issues);
+      }
+      if (error instanceof Error) {
+        setISError(error.message);
+      }
+    }
   }
 
   return (
@@ -140,20 +144,17 @@ export default function Login() {
             </Form>
           </CardContent>
           <CardFooter className="flex flex-col">
-            <p className="mt-2 text-xs text-center text-gray-700">
+            <p className="mt-2 text-xs text-center text-sidebar-foreground">
               {" "}
               Esqueceu sua senha?{" "}
-              <Link
-                href="/auth/forgotpassword"
-                className="text-blue-600 hover:underline"
-              >
+              <Link href="/register" className="text-blue-600 hover:underline">
                 Redefinir senha
               </Link>
             </p>
-            <p className="mt-2 text-xs text-center text-gray-700">
+            <p className="mt-2 text-xs text-center text-sidebar-foreground">
               {" "}
               Não possui uma conta?{" "}
-              <Link href="/auth" className="text-blue-600 hover:underline">
+              <Link href="/register" className="text-blue-600 hover:underline">
                 Sign up
               </Link>
             </p>

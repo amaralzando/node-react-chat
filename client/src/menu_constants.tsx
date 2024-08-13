@@ -1,5 +1,12 @@
 import { SideNavItemGroup } from "@/src/type";
-import { BsGear, BsHouseDoor, BsQuestionCircle } from "react-icons/bs";
+import {
+  BsEnvelope,
+  BsGear,
+  BsHouseDoor,
+  BsKanban,
+  BsListUl,
+  BsQuestionCircle,
+} from "react-icons/bs";
 
 export const SIDENAV_ITEMS: SideNavItemGroup[] = [
   {

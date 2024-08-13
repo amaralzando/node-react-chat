@@ -54,7 +54,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const { "gasachat.token": token } = parseCookies();
     if (token) {
-      api.get("/me").then((resp) => {
+      const { "gasachat.user_Id": user_Id } = parseCookies();
+      api.post("/user/me", { user_Id }).then((resp) => {
         setUser(resp.data);
       });
     }
@@ -62,11 +63,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn({ email, password }: SignInData) {
     await api
-      .post("/auth", { email, password })
+      .post("/user/auth", { email, password })
       .then((resp) => {
         const user = resp.data;
+        console.log(user);
 
         setCookie(undefined, "gasachat.token", user.token, {
+          maxAge: 60 * 60 * 24, // 1 day
+        });
+        setCookie(undefined, "gasachat.user_Id", user.user_Id, {
           maxAge: 60 * 60 * 24, // 1 day
         });
 
@@ -86,11 +91,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signUp({ name, email, password }: SignUpData) {
     await api
-      .post("/register", { name, email, password })
+      .post("/user/register", { name, email, password })
       .then((resp) => {
         const user = resp.data;
 
         setCookie(undefined, "gasachat.token", user.token, {
+          maxAge: 60 * 60 * 24, // 1 day
+        });
+        setCookie(undefined, "gasachat.user_Id", user.user_Id, {
           maxAge: 60 * 60 * 24, // 1 day
         });
 
@@ -110,6 +118,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function logOut() {
     destroyCookie(undefined, "gasachat.token");
+    destroyCookie(undefined, "gasachat.user_Id");
 
     console.log("Logged out. Redirecting");
     router.push("/");

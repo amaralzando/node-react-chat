@@ -13,11 +13,11 @@ RUN npm install
 # Copie o restante do código
 COPY client/ .
 
-# Construa o projeto
-RUN npm run build
+# # Construa o projeto
+# RUN npm run build
 
 # Exponha a porta usada pelo Next.js
 EXPOSE 3000
 
 # Inicie o servidor Next.js
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
